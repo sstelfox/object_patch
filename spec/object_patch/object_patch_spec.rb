@@ -1,3 +1,4 @@
+
 require 'spec_helper'
 
 describe ObjectPatch do
@@ -5,3 +6,4 @@ describe ObjectPatch do
     ObjectPatch::VERSION.should_not be_nil
   end
 end
+
