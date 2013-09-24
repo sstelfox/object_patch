@@ -1,0 +1,4 @@
+[submodule "spec/fixtures/json-patch-tests"]
+	path = spec/fixtures/json-patch-tests
+	url = https://github.com/json-patch/json-patch-tests.git
+	branch = master
