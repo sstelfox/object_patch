@@ -1,4 +1,6 @@
 
+require 'json'
+
 TEST_DIR = File.expand_path('../../', __FILE__)
 
 module JSONTestLoader
