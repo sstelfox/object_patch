@@ -3,8 +3,8 @@ require 'spec_helper'
 
 def msg_to_exception(msg)
   case msg
-  when /Out of bounds/i then ArgumentError
-  else then ArgumentError
+  when /Out of bounds/i; ArgumentError
+  else; ArgumentError
   end
 end
 
@@ -15,17 +15,22 @@ def run_test(t)
 end
 
 def test_for_error(t)
-  source_hash = t["doc"]
-  patch = t["patch"]
+  it t["comment"] do
+    excep = msg_to_exception(t["error"])
+    patch = t["patch"]
+    source_hash = t["doc"]
 
-  expect { ObjectPatch.apply(source_hash, patch) }.to raise_error(msg_to_exception(t["error"]))
+    expect { ObjectPatch.apply(source_hash, patch) }.to raise_error(msg_to_exception(t["error"]))
+  end
 end
 
 def test_success(t)
-  source_hash = t["doc"]
-  patch = t["patch"]
+  it t["comment"] do
+    source_hash = t["doc"]
+    patch = t["patch"]
 
-  ObjectPath.apply(source_hash, patch).should eq(t['expected'])
+    ObjectPatch.apply(source_hash, patch).should eq(t['expected'])
+  end
 end
 
 describe ObjectPatch do
