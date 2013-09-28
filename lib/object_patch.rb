@@ -6,6 +6,7 @@ require "object_patch/operations/remove"
 require "object_patch/operations/replace"
 require "object_patch/operations/test"
 require "object_patch/operation_factory"
+require "object_patch/pointer"
 require "object_patch/version"
 
 module ObjectPatch
