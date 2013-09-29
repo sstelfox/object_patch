@@ -6,9 +6,12 @@ describe ObjectPatch::Pointer, :focus do
     [ [], '/' ],
     [ ['a/b'], '/a~1b' ],
     [ ['c%d'], '/c%d' ],
-    [ ['e^f'], '/e~0f' ],
+    [ ['e^f'], '/e^f' ],
     [ ['g|h'], '/g|h' ],
-    [ ['i\\j'], '/i\\j' ]
+    [ ['i\\j'], '/i\\j' ],
+    [ ['k\"l'], '/k\"l' ],
+    [ [' '], '/ ' ],
+    [ ['m~n'], '/m~0n' ],
   ]
 
   conversions.each do |c|
