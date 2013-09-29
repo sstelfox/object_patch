@@ -1,7 +1,7 @@
 
 require 'spec_helper'
 
-describe ObjectPatch::Pointer, :focus do
+describe ObjectPatch::Pointer do
   conversions = [
     [ [], '/' ],
     [ ['a/b'], '/a~1b' ],
