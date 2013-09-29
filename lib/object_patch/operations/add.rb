@@ -12,16 +12,21 @@ module ObjectPatch
       end
 
       def recursive_set(obj, path, new_value)
-        if path.length > 1
-          key = path.shift
+        return obj if path.nil? || path.empty?
 
-          # If the object is nil, default to an empty array or a hash
-          new_obj = new_obj || (key.is_a?(Fixnum) ? [] : {})
+        # Grab our key off the stack
+        key = path.shift
 
-          obj[key] = recursive_set((new_obj[key] || {}), path, new_value)
+        # Ensure we have an actual object to set the value on
+        key_type = (key == "-" || key.is_a?(Fixnum)) ? Array : Hash
 
+        if key == "-"
+          # Hyphen is a special case where we append to the array
+          obj = key_type.new if obj.nil?
+          obj.push(recursive_set(nil, path, new_value))
         else
-          obj[path.first] = new_value
+          obj = key_type.new if obj.nil?
+          obj[key] = recursive_set(obj[key], path, new_value)
         end
 
         obj

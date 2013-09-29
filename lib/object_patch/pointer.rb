@@ -1,20 +1,29 @@
 
 module ObjectPatch
   module Pointer
-    def encode(ary_path)
-      ary_path.map! { |i| i.gsub("~", "~0") }
-      ary_path.map! { |i| i.gsub("/", "~1") }
-      ary_path.join("/")
-    end
-
     def decode(path)
-      path.split("/").map do |p|
-        p.gsub!("~1", "/")
-        p.gsub!("~0", "~")
-      end
+      # Strip off the leading slash
+      path = path[1..-1]
+      path.split("/").map { |p| unescape(p) }
     end
 
-    module_function :decode, :encode
+    def encode(ary_path)
+      ary_path = Array(ary_path).map do |p|
+        p.match(/\A\d+\Z/) ? p.to_i : escape(p)
+      end
+
+      "/" << ary_path.join("/")
+    end
+
+    def escape(str)
+      str.gsub("~", "~0").gsub("/", "~1")
+    end
+
+    def unescape(str)
+      str.gsub("~1", "/").gsub("~0", "~")
+    end
+
+    module_function :decode, :encode, :escape, :unescape
   end
 end
 
