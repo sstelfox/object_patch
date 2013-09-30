@@ -12,6 +12,7 @@ describe ObjectPatch::Pointer do
     [ ['k\"l'], '/k\"l' ],
     [ [' '], '/ ' ],
     [ ['m~n'], '/m~0n' ],
+    [ ['test', 1], '/test/1' ],
   ]
 
   conversions.each do |c|

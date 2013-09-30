@@ -4,13 +4,11 @@ module ObjectPatch
     def decode(path)
       # Strip off the leading slash
       path = path[1..-1]
-      path.split("/").map { |p| unescape(p) }
+      path.split("/").map { |p| p.match(/\A\d+\Z/) ? p.to_i : unescape(p) }
     end
 
     def encode(ary_path)
-      ary_path = Array(ary_path).map do |p|
-        p.match(/\A\d+\Z/) ? p.to_i : escape(p)
-      end
+      ary_path = Array(ary_path).map { |p| p.is_a?(String) ? escape(p) : p }
 
       "/" << ary_path.join("/")
     end

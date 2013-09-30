@@ -1,4 +1,6 @@
 
+require 'pry'
+
 module ObjectPatch
   module Operations
     class Add
@@ -23,10 +25,14 @@ module ObjectPatch
         if key == "-"
           # Hyphen is a special case where we append to the array
           obj = key_type.new if obj.nil?
-          obj.push(recursive_set(nil, path, new_value))
+          obj.push(recursive_set(obj, path, new_value))
         else
           obj = key_type.new if obj.nil?
-          obj[key] = recursive_set(obj[key], path, new_value)
+
+          recursion_result = recursive_set(obj[key], path, new_value)
+
+          obj[key] = recursion_result if key_type == Hash
+          obj.insert(key, recursion_result) if key_type == Array
         end
 
         obj
