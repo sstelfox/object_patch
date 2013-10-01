@@ -42,6 +42,14 @@ Or install it yourself as:
 
 TODO: Write usage instructions here
 
+## RFC6901
+
+There is one thing that I implemented within this RFC that is either an
+extension or a violation of the RFC depending on your view of it. The violation
+specifically is I have allowed negative array addressing (ie -1 is the last
+element, -2 the second to last, &c). The absolute value of the index can't be
+greater than or equal to the the length of the array.
+
 ## RFC6902
 
 One thing to note is that while referencing [RFC6902
