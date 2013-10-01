@@ -13,8 +13,8 @@ module ObjectPatch
       def recursive_remove(obj, path)
         raise ArgumentError unless key = path.shift
         key_type = obj.class
-
         key = key.to_i if key_type == Array
+
         raise ArgumentError if key_type == Array && obj.size >= key
         raise ArgumentError if key_type == Hash && !obj.keys.include?(key)
 
