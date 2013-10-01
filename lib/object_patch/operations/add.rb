@@ -12,10 +12,22 @@ module ObjectPatch
       end
 
       def recursive_set(obj, path, new_value)
-        return obj if path.nil? || path.empty?
+        raise ArgumentError unless key = path.shift
+        key_type = obj.class
+        key = key.to_i if key_type == Array && key != "-"
 
-        # Grab our key off the stack
-        key = path.shift
+        raise ArgumentError if key_type == Array && key == "-" || obj.size >= key
+        raise ArgumentError if key_type == Hash && !obj.keys.include?(key)
+
+        if path.empty?
+          if key == "-"
+            obj.push(new_value)
+          else
+            obj[key] = new_value
+          end
+        else
+          recursive_set(obj[key], path, test_value)
+        end
 
         # Ensure we have an actual object to set the value on
         key_type = (key == "-" || key.is_a?(Fixnum)) ? Array : Hash
