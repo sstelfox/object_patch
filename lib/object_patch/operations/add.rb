@@ -14,7 +14,6 @@ module ObjectPatch
       def recursive_set(obj, path, new_value)
         raise ArgumentError unless key = path.shift
         key_type = obj.class
-        key = key.to_i if key_type == Array && key != "-"
 
         raise ArgumentError if key_type == Array && key.to_s == "-" || obj.size >= key
         raise ArgumentError if key_type == Hash && !obj.keys.include?(key)
