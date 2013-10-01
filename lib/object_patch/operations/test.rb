@@ -12,16 +12,19 @@ module ObjectPatch
       end
 
       def recursive_test(obj, path, test_value)
-        if path.nil? || path.empty?
-          raise ArgumentError unless (obj == test_value)
+        raise ArgumentError unless key = path.shift
+        key_type = obj.class
+        key = key.to_i if key_type == Array
+
+        raise ArgumentError if key_type == Array && obj.size >= key
+        raise ArgumentError if key_type == Hash && !obj.keys.include?(key)
+
+        if path.empty?
+          raise ArgumentError unless obj[key] == test_value
           return
+        else
+          recursive_test(obj[key], path, test_value)
         end
-
-        # Grab our key off the stack
-        key = path.shift
-        raise ArgumentError if key.nil?
-
-        recursive_test(obj[key], path, test_value)
       end
     end
   end
