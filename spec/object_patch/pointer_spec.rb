@@ -21,7 +21,7 @@ describe ObjectPatch::Pointer do
     end
     
     it "should decode #{c.last} as #{c.first}" do
-      ObjectPatch::Pointer.decode(c.last).should eq(c.first)
+      ObjectPatch::Pointer.parse(c.last).should eq(c.first)
     end
   end
 end

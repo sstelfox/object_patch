@@ -3,7 +3,7 @@ module ObjectPatch
   module Operations
     class Remove
       def initialize(patch_hash)
-        @path = ObjectPatch::Pointer.decode(patch_hash.fetch("path"))
+        @path = ObjectPatch::Pointer.parse(patch_hash.fetch("path"))
       end
 
       def apply(source_hash)

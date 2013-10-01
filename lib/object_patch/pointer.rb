@@ -2,7 +2,7 @@
 module ObjectPatch
   module Pointer
     def eval(path, obj)
-      path.inject(object) do |o, p|
+      path.inject(obj) do |o, p|
         if o.is_a?(Array)
           raise ObjectPatch::IndexError unless p.match(/\A-?\d+\Z/)
           raise ObjectPatch::IndexError unless p.to_i.abs < p.size
@@ -12,12 +12,6 @@ module ObjectPatch
           o[p]
         end
       end
-    end
-
-    def parse(path)
-      # Strip off the leading slash
-      path = path.sub(/^\//, '')
-      path.split("/").map { |p| p.match(/\A\d+\Z/) ? p.to_i : unescape(p) }
     end
 
     def encode(ary_path)
@@ -30,11 +24,17 @@ module ObjectPatch
       str.gsub("~", "~0").gsub("/", "~1")
     end
 
+    def parse(path)
+      # Strip off the leading slash
+      path = path.sub(/^\//, '')
+      path.split("/").map { |p| p.match(/\A\d+\Z/) ? p.to_i : unescape(p) }
+    end
+
     def unescape(str)
       str.gsub("~1", "/").gsub("~0", "~")
     end
 
-    module_function :decode, :encode, :escape, :unescape
+    module_function :eval, :encode, :escape, :parse, :unescape
   end
 end
 
