@@ -16,7 +16,7 @@ module ObjectPatch
         key_type = obj.class
         key = key.to_i if key_type == Array && key != "-"
 
-        raise ArgumentError if key_type == Array && key == "-" || obj.size >= key
+        raise ArgumentError if key_type == Array && key.to_s == "-" || obj.size >= key
         raise ArgumentError if key_type == Hash && !obj.keys.include?(key)
 
         if path.empty?
@@ -27,22 +27,6 @@ module ObjectPatch
           end
         else
           recursive_set(obj[key], path, test_value)
-        end
-
-        # Ensure we have an actual object to set the value on
-        key_type = (key == "-" || key.is_a?(Fixnum)) ? Array : Hash
-
-        if key == "-"
-          # Hyphen is a special case where we append to the array
-          obj = key_type.new if obj.nil?
-          obj.push(recursive_set(obj, path, new_value))
-        else
-          obj = key_type.new if obj.nil?
-
-          recursion_result = recursive_set(obj[key], path, new_value)
-
-          obj[key] = recursion_result if key_type == Hash
-          obj.insert(key, recursion_result) if key_type == Array
         end
 
         obj
