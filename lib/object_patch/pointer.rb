@@ -1,9 +1,22 @@
 
 module ObjectPatch
   module Pointer
-    def decode(path)
+    def eval(path, obj)
+      path.inject(object) do |o, p|
+        if o.is_a?(Array)
+          raise ObjectPatch::IndexError unless p.match(/\A-?\d+\Z/)
+          raise ObjectPatch::IndexError unless p.to_i.abs < p.size
+          o[p.to_i]
+        else
+          raise MissingKeyError unless o.keys.include?(p)
+          o[p]
+        end
+      end
+    end
+
+    def parse(path)
       # Strip off the leading slash
-      path = path[1..-1]
+      path = path.sub(/^\//, '')
       path.split("/").map { |p| p.match(/\A\d+\Z/) ? p.to_i : unescape(p) }
     end
 

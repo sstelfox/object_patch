@@ -2,6 +2,8 @@
 module ObjectPatch
   BaseException = Class.new(StandardError)
 
-  InvalidOperation = Class.new(BaseException)
-  IndexError = Class.new(BaseException)
+  IndexError          = Class.new(BaseException)
+  InvalidOperation    = Class.new(BaseException)
+  MissingKeyError     = Class.new(BaseException)
+  TestOperationFailed = Class.new(BaseException)
 end
