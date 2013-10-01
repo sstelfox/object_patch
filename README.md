@@ -53,6 +53,9 @@ here](http://tools.ietf.org/id/draft-ietf-appsawg-json-patch-10.txt). This was
 gleaned from the public history of review of the RFC which is [available
 here](https://datatracker.ietf.org/doc/rfc6902/history/).
 
+I referenced the draft version 10 for any information available in the appendix
+and the published version when the information was available there.
+
 ## Contributing
 
 1. Fork it
