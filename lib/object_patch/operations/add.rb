@@ -1,6 +1,4 @@
 
-require 'pry'
-
 module ObjectPatch
   module Operations
     class Add

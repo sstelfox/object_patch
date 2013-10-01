@@ -1,4 +1,6 @@
 
+
+require "object_patch/exceptions"
 require "object_patch/operations/add"
 require "object_patch/operations/copy"
 require "object_patch/operations/move"
@@ -14,6 +16,9 @@ module ObjectPatch
     patches.inject(source) do |s, p|
       OperationFactory.process(p).apply(s)
     end
+  end
+
+  def generate(source, target_hash)
   end
 
   module_function :apply
