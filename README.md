@@ -42,6 +42,17 @@ Or install it yourself as:
 
 TODO: Write usage instructions here
 
+## RFC6902
+
+One thing to note is that while referencing [RFC6902
+(JSON::Patch)](http://tools.ietf.org/rfc/rfc6902.txt) it came to my attention
+that the published RFC was missing a section that was part of the accepted
+revision (specifically the appendix). The revision of the document that was
+accepted by the IETF can be [found
+here](http://tools.ietf.org/id/draft-ietf-appsawg-json-patch-10.txt). This was
+gleaned from the public history of review of the RFC which is [available
+here](https://datatracker.ietf.org/doc/rfc6902/history/).
+
 ## Contributing
 
 1. Fork it
