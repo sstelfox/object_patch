@@ -1,5 +1,8 @@
 # ObjectPatch
 
+Please note this project isn't complete in either the generation or application
+of patches.
+
 ObjectPatch is a pure ruby implementation of [RFC6902
 (JSON::Patch)](http://tools.ietf.org/rfc/rfc6902.txt) for standard hashes,
 arrays, and scalar types. This will both generate patches as well as apply
@@ -9,8 +12,17 @@ Rather than restricting end-users to the native JSON library, ObjectPatch only
 operates on pure Ruby objects. These objects can be converted to a proper JSON
 encoding using the standard JSON library or any other JSON compliant encoder.
 
-Unlike some of the similar projects out there, this strictly follows the
-mentioned RFCs including [RFC6901](http://tools.ietf.org/rfc/rfc6902.txt).
+The application of patches is based on
+[Hana](http://github.com/tenderlove/hana). I greatly respect tenderlove but
+disagreed with pieces of his implementation. I could have chosen to make pull
+requests but since I was going to be extending the scope of the project I
+decided to create my own project. At the very least it seemed like a fun
+project to attempt.
+
+The generation of patches attempts to do so in a way to minimize the size of
+the patch, this is particularily difficult in arrays where the deletion of a
+single element at the beginning may be hard to distinguish from the changing of
+multiple values and the removal of the last.
 
 ## Installation
 
@@ -40,3 +52,4 @@ TODO: Write usage instructions here
 5. Create new Pull Request
 
 I'll respond to all pull requests within two weeks, hopefully in under one.
+
