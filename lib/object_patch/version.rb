@@ -1,5 +1,5 @@
 
 module ObjectPatch
-  # The current gem version we're developing for.
-  VERSION = "0.0.1"
+  # The current gem version.
+  VERSION = "0.8.1"
 end

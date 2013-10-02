@@ -1,12 +1,20 @@
 
 require 'spec_helper'
+  BaseException = Class.new(StandardError)
+
+# InvalidIndexError
+# InvalidOperation
+# MissingTargetException
+# ObjectOperationOnArrayException
+# OutOfBoundsException
+# TraverseScalarException
+# FailedTestException
 
 def msg_to_exception(msg)
-  puts "Received exception: #{msg}"
   case msg
-  when /out of bounds/i; ObjectPatch::IndexError
-  when /missing|non-existant/; ObjectPatch::MissingTargetError
-  else; ObjectPatch::TestOperationFailed
+  when /out of bounds/i; ObjectPatch::InvalidIndexError
+  when /missing|non-existant/; ObjectPatch::MissingTargetException
+  else; [ObjectPatch::InvalidIndexError, ObjectPatch::FailedTestException]
   end
 end
 
@@ -22,7 +30,7 @@ def test_for_error(t)
     patch = t["patch"]
     source_hash = t["doc"]
 
-    expect { ObjectPatch.apply(source_hash, patch) }.to raise_error(msg_to_exception(t["error"]))
+    expect { ObjectPatch.apply(source_hash, patch) }.to raise_error { |e| Array(msg_to_exception(t["error"])).include?(e) }
   end
 end
 

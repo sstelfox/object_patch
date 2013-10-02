@@ -1,14 +1,17 @@
 
 module ObjectPatch
   module OperationFactory
-    def process(operation)
-      const_spot = operation.delete("op").capitalize.to_sym
-      raise InvalidOperation unless ObjectPatch::Operations.const_defined?(const_spot)
+    def build(patch)
+      op_const = patch['op'].capitalize.to_sym
 
-      ObjectPatch::Operations.const_get(const_spot).new(operation)
+      unless Operations.const_defined?(op_const)
+        raise InvalidOperation, "Invalid operation: `#{patch['op']}`" 
+      end
+
+      Operations.const_get(op_const).new(patch)
     end
 
-    module_function :process
+    module_function :build
   end
 end
 

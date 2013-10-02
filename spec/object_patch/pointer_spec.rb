@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe ObjectPatch::Pointer do
   conversions = [
-    [ [], '/' ],
+    [ [''], '/' ],
     [ ['a/b'], '/a~1b' ],
     [ ['c%d'], '/c%d' ],
     [ ['e^f'], '/e^f' ],

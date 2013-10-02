@@ -1,31 +1,20 @@
 
-module ObjectPatch
-  module Operations
-    class Replace
-      def initialize(patch_hash)
-        @path = ObjectPatch::Pointer.parse(patch_hash.fetch("path"))
-        @value = patch_hash.fetch("value")
-      end
+module ObjectPatch::Operations
+  class Replace
+    def initialize(patch_data)
+      @patch_data = patch_data
+    end
 
-      def apply(source_hash)
-        recursive_replace(source_hash, @path, @value)
-      end
+    def apply(target_doc)
+      list = ObjectPatch::Pointer.parse(@patch_data['path'])
+      key  = list.pop
+      obj  = ObjectPatch::Pointer.eval(list, target_doc)
 
-      def recursive_replace(obj, path, new_value)
-        raise ArgumentError unless key = path.shift
-        key_type = obj.class
-        key = key.to_i if key_type == Array
-
-        raise ArgumentError if key_type == Array && obj.size >= key
-        raise ArgumentError if key_type == Hash && !obj.keys.include?(key)
-
-        if path.empty?
-          obj[key] = new_value
-        else
-          obj[key] = recursive_replace(obj[key], path, new_value)
-        end
-
-        obj
+      if obj.is_a?(Array)
+        raise ObjectPatch::InvalidIndexError unless key =~ /\A\d+\Z/
+        obj[key.to_i] = @patch_data['value']
+      else
+        obj[key] = @patch_data['value']
       end
     end
   end

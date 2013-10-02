@@ -1,17 +1,20 @@
 
-module ObjectPatch
-  module Operations
-    class Move
-      def initialize(patch_hash)
-        @from = patch_hash.fetch("from")
-        @to = patch_hash.fetch("path")
-      end
+module ObjectPatch::Operations
+  class Move
+    def initialize(patch_data)
+      @patch_data = patch_data
+    end
 
-      def apply(source_hash)
-        current = ObjectPatch::Pointer.eval(ObjectPatch::Pointer.parse(@from), source_hash)
-        source_hash = Remove.new({'path' => @from}).apply(source_hash)
-        Add.new({'path' => @to, 'value' => current}).apply(source_hash)
-      end
+    def apply(target_doc)
+      from     = ObjectPatch::Pointer.parse(@patch_data['from'])
+      to       = ObjectPatch::Pointer.parse(@patch_data['path'])
+      from_key = from.pop
+      key      = to.pop
+      src      = ObjectPatch::Pointer.eval(from, target_doc)
+      dest     = ObjectPatch::Pointer.eval(to, target_doc)
+
+      obj = ObjectPatch::Operations.rm_op(src, from_key)
+      ObjectPatch::Operations.add_op(dest, key, obj)
     end
   end
 end

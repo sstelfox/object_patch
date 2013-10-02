@@ -1,32 +1,16 @@
 
-module ObjectPatch
-  module Operations
-    class Remove
-      def initialize(patch_hash)
-        @path = ObjectPatch::Pointer.parse(patch_hash.fetch("path"))
-      end
+module ObjectPatch::Operations
+  class Remove
+    def initialize(patch_data)
+      @patch_data = patch_data
+    end
 
-      def apply(source_hash)
-        recursive_remove(source_hash, @path)
-      end
+    def apply(target_doc)
+      list = ObjectPatch::Pointer.parse(@patch_data['path'])
+      key  = list.pop
+      obj  = ObjectPatch::Pointer.eval(list, target_doc)
 
-      def recursive_remove(obj, path)
-        raise ArgumentError unless key = path.shift
-        key_type = obj.class
-        key = key.to_i if key_type == Array
-
-        raise ArgumentError if key_type == Array && obj.size >= key
-        raise ArgumentError if key_type == Hash && !obj.keys.include?(key)
-
-        if path.empty?
-          obj.delete_at(key) if key_type == Array
-          obj.delete!(path.first) if key_type == Hash
-        else
-          obj[key] = recursive_remove(obj[key], path)
-        end
-
-        obj
-      end
+      ObjectPatch::Operations.rm_op(obj, key)
     end
   end
 end

@@ -1,16 +1,17 @@
 
-module ObjectPatch
-  module Operations
-    class Test
-      def initialize(patch_hash)
-        @path = ObjectPatch::Pointer.parse(patch_hash.fetch("path"))
-        @value = patch_hash.fetch("value")
-      end
+module ObjectPatch::Operations
+  class Test
+    def initialize(patch_data)
+      @patch_data = patch_data
+    end
 
-      def apply(source_hash)
-        unless (ObjectPatch::Pointer.eval(@path, source_hash) == @value)
-          raise TestOperationFailed.new(@path, @value) 
-        end
+    # A simple test to validate the value at the expected location matches the
+    # value in the patch information.
+    def apply(target_doc)
+      expected = ObjectPatch::Pointer.eval(ObjectPatch::Pointer.parse(@patch_data['path']), target_doc)
+
+      unless expected == @patch_data['value']
+        raise ObjectPatch::FailedTestException.new(@patch_data['value'], @patch_data['path'])
       end
     end
   end

@@ -1,20 +1,15 @@
 
 
 require "object_patch/exceptions"
-require "object_patch/operations/add"
-require "object_patch/operations/copy"
-require "object_patch/operations/move"
-require "object_patch/operations/remove"
-require "object_patch/operations/replace"
-require "object_patch/operations/test"
 require "object_patch/operation_factory"
+require "object_patch/operations"
 require "object_patch/pointer"
 require "object_patch/version"
 
 module ObjectPatch
   def apply(source, patches)
-    patches.inject(source) do |s, p|
-      OperationFactory.process(p).apply(s)
+    patches.each_with_object(source) do |patch, doc|
+      OperationFactory.build(patch).apply(doc)
     end
   end
 
