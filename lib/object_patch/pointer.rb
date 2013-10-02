@@ -4,7 +4,7 @@ module ObjectPatch
     def eval(path, obj)
       path.inject(obj) do |o, p|
         if o.is_a?(Array)
-          raise ObjectPatch::IndexError unless p.match(/\A-?\d+\Z/)
+          raise ObjectPatch::ObjectOperationOnArrayError unless p.match(/\A-?\d+\Z/)
           raise ObjectPatch::IndexError unless p.to_i.abs < p.size
           o[p.to_i]
         else
@@ -16,12 +16,12 @@ module ObjectPatch
 
     def encode(ary_path)
       ary_path = Array(ary_path).map { |p| p.is_a?(String) ? escape(p) : p }
-
       "/" << ary_path.join("/")
     end
 
     def escape(str)
-      str.gsub("~", "~0").gsub("/", "~1")
+      conv = { '~' => '~0', '/' => '~1' }
+      str.gsub(/~\//) { |m| conv[m] }
     end
 
     def parse(path)
@@ -31,7 +31,8 @@ module ObjectPatch
     end
 
     def unescape(str)
-      str.gsub("~1", "/").gsub("~0", "~")
+      conv = { '~0' => '~', '~1' => '/' }
+      str.gsub(/~[01]/) { |m| conv[m] }
     end
 
     module_function :eval, :encode, :escape, :parse, :unescape

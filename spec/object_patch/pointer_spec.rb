@@ -8,6 +8,7 @@ describe ObjectPatch::Pointer, :focus do
     [ ['c%d'], '/c%d' ],
     [ ['e^f'], '/e^f' ],
     [ ['g|h'], '/g|h' ],
+    [ ['~01'], '/~1' ],
     [ ['i\\j'], '/i\\j' ],
     [ ['k\"l'], '/k\"l' ],
     [ [' '], '/ ' ],
