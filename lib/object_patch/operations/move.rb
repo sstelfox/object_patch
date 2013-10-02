@@ -9,7 +9,7 @@ module ObjectPatch
 
       def apply(source_hash)
         current = ObjectPatch::Pointer.eval(@from, source_hash)
-        source_hash = Delete.new({'path' => @from}).apply(source_hash)
+        source_hash = Remove.new({'path' => @from}).apply(source_hash)
         Add.new({'path' => @to, 'value' => current}).apply(source_hash)
       end
     end

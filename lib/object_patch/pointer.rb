@@ -7,8 +7,14 @@ module ObjectPatch
           raise MissingKeyError unless o.keys.include?(p)
           o[p]
         else
-          raise ObjectPatch::ObjectOperationOnArrayError unless p.match(/\A-?\d+\Z/)
-          raise ObjectPatch::IndexError unless p.to_i.abs < p.size
+          # The last element +1 is technically how this is interpretted. This
+          # will always trigger the index error so it may not be valuable to
+          # set...
+          p = o.size if p == "-1"
+          # Technically a violation of the RFC to allow reverse access to the
+          # array but I'll allow it...
+          raise ObjectPatch::ObjectOperationOnArrayError unless p.to_s.match(/\A-?\d+\Z/)
+          raise ObjectPatch::IndexError unless p.to_i.abs < o.size
           o[p.to_i]
         end
       end
