@@ -14,16 +14,13 @@ module ObjectPatch
       def recursive_set(obj, path, new_value)
         raise ArgumentError unless key = path.shift
         key_type = obj.class
+        key = -1 if key == "-"
 
-        raise ArgumentError if key_type == Array && key.to_s == "-" || obj.size >= key.to_i
+        raise IndexError if key_type == Array && obj.size >= key.to_i
         raise MissingKeyError if key_type == Hash && !obj.keys.include?(key)
 
         if path.empty?
-          if key == "-"
-            obj.push(new_value)
-          else
-            obj[key] = new_value
-          end
+          obj.insert(key, new_value)
         else
           recursive_set(obj[key], path, test_value)
         end
