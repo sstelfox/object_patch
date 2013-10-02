@@ -8,7 +8,9 @@ module ObjectPatch
       end
 
       def apply(source_hash)
-        raise TestOperationFailed unless (ObjectPatch::Pointer.eval(@path, source_hash) == @value)
+        unless (ObjectPatch::Pointer.eval(@path, source_hash) == @value)
+          raise TestOperationFailed.new(@path, @value) 
+        end
       end
     end
   end

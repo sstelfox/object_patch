@@ -15,8 +15,8 @@ module ObjectPatch
         raise ArgumentError unless key = path.shift
         key_type = obj.class
 
-        raise ArgumentError if key_type == Array && key.to_s == "-" || obj.size >= key
-        raise ArgumentError if key_type == Hash && !obj.keys.include?(key)
+        raise ArgumentError if key_type == Array && key.to_s != "-" || obj.size >= key
+        raise MissingKeyError if key_type == Hash && !obj.keys.include?(key)
 
         if path.empty?
           if key == "-"

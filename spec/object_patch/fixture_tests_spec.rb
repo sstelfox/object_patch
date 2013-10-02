@@ -2,9 +2,11 @@
 require 'spec_helper'
 
 def msg_to_exception(msg)
+  puts "Received exception: #{msg}"
   case msg
-  when /Out of bounds/i; ArgumentError
-  else; ArgumentError
+  when /out of bounds/i; ObjectPatch::IndexError
+  when /missing|non-existant/; ObjectPatch::MissingKeyError
+  else; ObjectPatch::TestOperationFailed
   end
 end
 
