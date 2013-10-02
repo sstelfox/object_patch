@@ -3,13 +3,13 @@ module ObjectPatch
   module Pointer
     def eval(path, obj)
       path.inject(obj) do |o, p|
-        if o.is_a?(Array)
+        if o.is_a?(Hash)
+          raise MissingKeyError unless o.keys.include?(p)
+          o[p]
+        else
           raise ObjectPatch::ObjectOperationOnArrayError unless p.match(/\A-?\d+\Z/)
           raise ObjectPatch::IndexError unless p.to_i.abs < p.size
           o[p.to_i]
-        else
-          raise MissingKeyError unless o.keys.include?(p)
-          o[p]
         end
       end
     end
