@@ -5,7 +5,7 @@ def msg_to_exception(msg)
   puts "Received exception: #{msg}"
   case msg
   when /out of bounds/i; ObjectPatch::IndexError
-  when /missing|non-existant/; ObjectPatch::MissingKeyError
+  when /missing|non-existant/; ObjectPatch::MissingTargetError
   else; ObjectPatch::TestOperationFailed
   end
 end

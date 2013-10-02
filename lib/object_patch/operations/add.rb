@@ -17,7 +17,7 @@ module ObjectPatch
         key = -1 if key == "-"
 
         raise IndexError if key_type == Array && obj.size >= key.to_i
-        raise MissingKeyError if key_type == Hash && !obj.keys.include?(key)
+        raise MissingTargetError if key_type == Hash && !obj.keys.include?(key)
 
         if path.empty?
           obj.insert(key, new_value)

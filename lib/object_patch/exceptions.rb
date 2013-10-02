@@ -4,7 +4,7 @@ module ObjectPatch
 
   IndexError                  = Class.new(BaseException)
   InvalidOperation            = Class.new(BaseException)
-  MissingKeyError             = Class.new(BaseException)
+  MissingTargetError          = Class.new(BaseException)
   ObjectOperationOnArrayError = Class.new(BaseException)
 
   class TestOperationFailed < BaseException
