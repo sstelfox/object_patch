@@ -8,7 +8,6 @@ describe ObjectPatch::Pointer, :focus do
     [ ['c%d'], '/c%d' ],
     [ ['e^f'], '/e^f' ],
     [ ['g|h'], '/g|h' ],
-    [ ['~01'], '/~1' ],
     [ ['i\\j'], '/i\\j' ],
     [ ['k\"l'], '/k\"l' ],
     [ [' '], '/ ' ],
@@ -34,9 +33,19 @@ describe ObjectPatch::Pointer, :focus do
     it "should escape / as ~1" do
       ObjectPatch::Pointer.escape("/").should eq("~1")
     end
+  end
 
-    it "should escape ~s before /s to prevent reencoding the new ~s" do
-      ObjectPatch::Pointer.escape("/~").should eq("~1~0")
+  context "#unescape" do
+    it "should unescape ~0 as ~" do
+      ObjectPatch::Pointer.unescape("~0").should eq("~")
+    end
+
+    it "should unescape ~1 as /" do
+      ObjectPatch::Pointer.unescape("~1").should eq("/")
+    end
+
+    it "should unescape ~s before /s to prevent double unrolling" do
+      ObjectPatch::Pointer.unescape("~01").should eq("~1")
     end
   end
 end
