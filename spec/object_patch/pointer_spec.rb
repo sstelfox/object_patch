@@ -25,5 +25,19 @@ describe ObjectPatch::Pointer, :focus do
       ObjectPatch::Pointer.parse(c.last).should eq(c.first)
     end
   end
+
+  context "#escape" do
+    it "should escape ~ as ~0" do
+      ObjectPatch::Pointer.escape("~").should eq("~0")
+    end
+
+    it "should escape / as ~1" do
+      ObjectPatch::Pointer.escape("/").should eq("~1")
+    end
+
+    it "should escape ~s before /s to prevent reencoding the new ~s" do
+      ObjectPatch::Pointer.escape("/~").should eq("~1~0")
+    end
+  end
 end
 

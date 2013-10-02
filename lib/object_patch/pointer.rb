@@ -21,7 +21,7 @@ module ObjectPatch
 
     def escape(str)
       conv = { '~' => '~0', '/' => '~1' }
-      str.gsub(/~\//) { |m| conv[m] }
+      str.gsub(/~|\//) { |m| conv[m] }
     end
 
     def parse(path)
