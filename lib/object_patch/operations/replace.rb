@@ -31,7 +31,7 @@ module ObjectPatch::Operations
     #
     # @param [Hash] patch_data Parameters necessary to build the operation.
     # @option patch_data [String] path The location in the target document to
-    #   remove.
+    #   replace with the provided data.
     # @option patch_data [String] value The value that should be written over
     #   whatever is at the provided path.
     # @return [void]
