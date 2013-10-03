@@ -16,5 +16,5 @@ module ObjectPatch
   def generate(source, target_hash)
   end
 
-  module_function :apply
+  module_function :apply, :generate
 end
