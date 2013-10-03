@@ -19,7 +19,8 @@ def msg_to_exception(msg)
 end
 
 def run_test(t)
-  pending "Disabled: #{t["comment"]}" if t["disabled"]
+  # Even the disabled tests are passing now...
+  #pending "Disabled: #{t["comment"]}" if t["disabled"]
 
   !!t['error'] ? test_for_error(t) : test_success(t)
 end

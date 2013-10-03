@@ -10,13 +10,13 @@ module ObjectPatch::Operations
       return @value if processed_path.empty?
 
       key = processed_path.last
-      obj = ObjectPatch::Pointer.eval(processed_path[0...-1], target_doc)
+      inner_obj = ObjectPatch::Pointer.eval(processed_path[0...-1], target_doc)
 
-      if obj.is_a?(Array)
+      if inner_obj.is_a?(Array)
         raise ObjectPatch::InvalidIndexError unless key =~ /\A\d+\Z/
-        obj[key.to_i] = @value
+        inner_obj[key.to_i] = @value
       else
-        obj[key] = @value
+        inner_obj[key] = @value
       end
 
       target_doc

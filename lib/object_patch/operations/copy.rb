@@ -2,27 +2,39 @@
 module ObjectPatch::Operations
   class Copy
     def initialize(patch_data)
-      @patch_data = patch_data
+      @from = patch_data.fetch('from')
+      @path = patch_data.fetch('path')
     end
 
     def apply(target_doc)
-      from     = ObjectPatch::Pointer.parse(@patch_data['from'])
-      to       = ObjectPatch::Pointer.parse(@patch_data['path'])
-      from_key = from.pop
-      key      = to.pop
-      src      = ObjectPatch::Pointer.eval(from, target_doc)
-      dest     = ObjectPatch::Pointer.eval(to, target_doc)
+      src_key = processed_from.last
+      dst_key = processed_path.last
 
-      if src.is_a?(Array)
-        raise ObjectPatch::InvalidIndexError unless from_key =~ /\A\d+\Z/
-        obj = src.fetch(from_key.to_i)
+      src_obj = ObjectPatch::Pointer.eval(processed_from[0...-1], target_doc)
+      dst_obj = ObjectPatch::Pointer.eval(processed_path[0...-1], target_doc)
+
+      if src_obj.is_a?(Array)
+        raise ObjectPatch::InvalidIndexError unless src_key =~ /\A\d+\Z/
+        copied_obj = src_obj.fetch(src_key.to_i)
       else
-        obj = src.fetch(from_key)
+        copied_obj = src_obj.fetch(src_key)
       end
 
-      ObjectPatch::Operations.add_op(dest, key, obj)
+      ObjectPatch::Operations.add_op(dst_obj, dst_key, copied_obj)
 
       target_doc
+    end
+
+    def processed_from
+      ObjectPatch::Pointer.parse(@from)
+    end
+
+    def processed_path
+      ObjectPatch::Pointer.parse(@path)
+    end
+
+    def to_patch
+      { 'op' => 'copy', 'from' => @from, 'path' => @path }
     end
   end
 end
