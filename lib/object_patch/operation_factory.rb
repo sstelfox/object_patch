@@ -10,13 +10,13 @@ module ObjectPatch
     # @param [Hash] patch
     # @return [Object] One of the operations classes.
     def build(patch)
-      op_const = patch['op'].capitalize.to_sym
+      operations = ObjectPatch::Operations.constants.map { |c| c.to_s.downcase }
 
-      unless Operations.const_defined?(op_const)
+      unless operations.include?(patch['op'])
         raise InvalidOperation, "Invalid operation: `#{patch['op']}`" 
       end
 
-      Operations.const_get(op_const).new(patch)
+      Operations.const_get(patch['op'].capitalize.to_sym).new(patch)
     end
 
     module_function :build
