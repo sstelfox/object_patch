@@ -23,7 +23,7 @@ module ObjectPatch
     # @param [Fixnum,String] key The index / key where the new value will be
     #   inserted.
     # @param [Object] new_value The value to insert at the specified location.
-    # @return [void]
+    # @return [Object] The value that was added.
     def add_op(target_obj, key, new_value)
       if target_obj.is_a?(Array)
         target_obj.insert(check_array_index(key, target_obj.size), new_value)
@@ -59,6 +59,7 @@ module ObjectPatch
     # provided object. It does not return the new object itself!
     #
     # @param [Array, Hash] target_obj The object that will have the value removed.
+    # @return [Object] The deleted object.
     def rm_op(target_obj, key)
       if target_obj.is_a?(Array)
         raise InvalidIndexError unless key =~ /\A\d+\Z/
