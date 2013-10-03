@@ -57,8 +57,7 @@ module ObjectPatch
     # @param [String] str
     # @return [String]
     def escape(str)
-      conv = { '~' => '~0', '/' => '~1' }
-      str.gsub(/~|\//) { |m| conv[m] }
+      str.gsub(/~|\//, { '~' => '~0', '/' => '~1' })
     end
 
     # Convert a JSON pointer into an array of keys that can be used to traverse
@@ -82,8 +81,7 @@ module ObjectPatch
     # @param [String] str
     # @return [String]
     def unescape(str)
-      conv = { '~0' => '~', '~1' => '/' }
-      str.gsub(/~[01]/) { |m| conv[m] }
+      str.gsub(/~[01]/, { '~0' => '~', '~1' => '/' })
     end
 
     module_function :eval, :encode, :escape, :parse, :unescape
