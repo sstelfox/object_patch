@@ -15,6 +15,8 @@ module ObjectPatch::Operations
 
       obj = ObjectPatch::Operations.rm_op(src, from_key)
       ObjectPatch::Operations.add_op(dest, key, obj)
+
+      target_doc
     end
   end
 end

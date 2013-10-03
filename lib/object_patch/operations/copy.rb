@@ -21,6 +21,8 @@ module ObjectPatch::Operations
       end
 
       ObjectPatch::Operations.add_op(dest, key, obj)
+
+      target_doc
     end
   end
 end

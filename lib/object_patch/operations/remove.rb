@@ -11,6 +11,8 @@ module ObjectPatch::Operations
       obj  = ObjectPatch::Pointer.eval(list, target_doc)
 
       ObjectPatch::Operations.rm_op(obj, key)
+
+      target_doc
     end
   end
 end

@@ -8,8 +8,8 @@ require "object_patch/version"
 
 module ObjectPatch
   def apply(source, patches)
-    patches.each_with_object(source) do |patch, doc|
-      OperationFactory.build(patch).apply(doc)
+    patches.inject(source) do |src, patch|
+      OperationFactory.build(patch).apply(src)
     end
   end
 

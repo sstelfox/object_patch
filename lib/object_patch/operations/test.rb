@@ -12,6 +12,8 @@ module ObjectPatch::Operations
       unless @value == ObjectPatch::Pointer.eval(processed_path, target_doc)
         raise ObjectPatch::FailedTestException.new(@value, @path)
       end
+
+      target_doc
     end
 
     def processed_path

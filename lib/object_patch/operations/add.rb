@@ -18,6 +18,8 @@ module ObjectPatch::Operations
       else
         dest_obj.replace(new_value)
       end
+
+      target_doc
     end
   end
 end
