@@ -1,7 +1,9 @@
 
 module ObjectPatch::Operations
+
   # A representation of a JSON pointer remove operation.
   class Remove
+
     # Apply this operation to the provided document and return the updated
     # document. Please note that the changes will be reflected not only in the
     # returned value but the original document that was passed in as well.
@@ -38,7 +40,7 @@ module ObjectPatch::Operations
     # Covert this operation to a format that can be built into a full on JSON
     # patch.
     #
-    # @return [Hash<String => String>] JSON Remove operation
+    # @return [Hash<String => String>] JSON patch remove operation
     def to_patch
       { 'op' => 'remove', 'path' => @path }
     end
