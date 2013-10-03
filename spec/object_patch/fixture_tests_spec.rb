@@ -35,11 +35,22 @@ def test_for_error(t)
 end
 
 def test_success(t)
-  it t["comment"] do
-    source_hash = t["doc"]
-    patch = t["patch"]
+  task_name = t["comment"] || t["patch"]
 
-    ObjectPatch.apply(source_hash, patch).should eq(t['expected'])
+  if t['expected']
+    it task_name do
+      source_hash = t["doc"]
+      patch = t["patch"]
+
+      ObjectPatch.apply(source_hash, patch).should eq(t['expected'])
+    end
+  else
+    it "#{task_name} should not raise error" do
+      source_hash = t["doc"]
+      patch = t["patch"]
+
+      expect { ObjectPatch.apply(source_hash, patch) }.to_not raise_error
+    end
   end
 end
 
