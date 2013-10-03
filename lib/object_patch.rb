@@ -6,7 +6,8 @@ require "object_patch/operations"
 require "object_patch/pointer"
 require "object_patch/version"
 
-module ObjectPatch
+module ObjectPatch # :nodoc:
+
   # Applies a series of patches to a source document. It is important to note
   # that this will return the changed document but will also modify the original
   # document that got passed in, using dup also isn't enough to prevent this
