@@ -1,6 +1,7 @@
 
 
 require "object_patch/exceptions"
+require "object_patch/generator"
 require "object_patch/operation_factory"
 require "object_patch/operations"
 require "object_patch/pointer"
@@ -30,15 +31,14 @@ module ObjectPatch # :nodoc:
     end
   end
 
-  # Generate a series of patch operations that describe the changes from the
-  # source object to the target object.
+  # Proxies the generation of a new set of patches to the Generator.
   #
-  # @todo This doesn't do anything yet...
+  # @see [Generator#generate]
   # @param [Object] source The source document
-  # @param [Object] target_hash The target document we'll generate the
+  # @param [Object] target The target document we'll generate the
   #   differences for.
   # @return [Array<Hash>]
-  def generate(source, target_hash)
+  def generate(source, target)
   end
 
   module_function :apply, :generate
