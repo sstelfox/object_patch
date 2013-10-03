@@ -1,5 +1,6 @@
 
 module ObjectPatch
+
   # This module contains the code to convert between an JSON pointer path
   # representation and the keys required to traverse an array. It can make use
   # of an a path and evaluate it against a provided (potentially deeply nested)
@@ -9,6 +10,7 @@ module ObjectPatch
   # been made, though they shouldn't break compatibility with pure
   # implementations.
   module Pointer
+
     # Given a parsed path and an object, get the nested value within the object.
     #
     # @param [Array<String,Fixnum>] path Key path to traverse to get the value.

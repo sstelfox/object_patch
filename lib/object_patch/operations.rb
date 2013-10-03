@@ -6,15 +6,16 @@ require "object_patch/operations/remove"
 require "object_patch/operations/replace"
 require "object_patch/operations/test"
 
-# These operations take advantage of the fact that Pointer#eval returns the same
-# object (obj.object_id match) and thus any changes made to the extracted object
-# will be reflected in the original deeply nested object.
 module ObjectPatch
+
+  # These operations take advantage of the fact that Pointer#eval returns the
+  # same object (obj.object_id match) and thus any changes made to the
+  # extracted object will be reflected in the original deeply nested object.
   module Operations
 
-    # Add a value at the provided key within the provided object. This will behave
-    # differently depending on whether we're processing a hash or an array as the
-    # target destination.
+    # Add a value at the provided key within the provided object. This will
+    # behave differently depending on whether we're processing a hash or an
+    # array as the target destination.
     #
     # It is important to note that this behaves by adjusting the state of the
     # provided object. It does not return the new object itself!
@@ -32,9 +33,9 @@ module ObjectPatch
       end
     end
 
-    # Validates that the array index provided falls within the acceptable range or
-    # in the event we have received the special '-' index defined in the JSON
-    # Pointer RFC we treat it as the last element.
+    # Validates that the array index provided falls within the acceptable range
+    # or in the event we have received the special '-' index defined in the
+    # JSON Pointer RFC we treat it as the last element.
     #
     # @param [String,Fixnum] index The index value to validate
     # @param [Fixnum] array_size The size of the array this index will be used
@@ -46,8 +47,9 @@ module ObjectPatch
 
       index = index.to_i
 
-      # There is a bug in the IETF tests that require us to allow patches to set a
-      # value at the end of the array. The final '<=' should actually be a '<'.
+      # There is a bug in the IETF tests that require us to allow patches to
+      # set a value at the end of the array. The final '<=' should actually be
+      # a '<'.
       raise OutOfBoundsException unless (0 <= index && index <= array_size)
 
       index
@@ -58,7 +60,8 @@ module ObjectPatch
     # It is important to note that this behaves by adjusting the state of the
     # provided object. It does not return the new object itself!
     #
-    # @param [Array, Hash] target_obj The object that will have the value removed.
+    # @param [Array, Hash] target_obj The object that will have the value
+    #   removed.
     # @return [Object] The deleted object.
     def rm_op(target_obj, key)
       if target_obj.is_a?(Array)
