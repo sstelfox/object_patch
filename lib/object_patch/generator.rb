@@ -21,10 +21,10 @@ module ObjectPatch
         return [Operations::Replace.new("path" => Pointer.encode(current_path), "value" => target)]
       end
 
-      case source.class
-      when Hash
+      case source.class.to_s
+      when "Hash"
         return hash_compare(source, target, current_path)
-      when Array
+      when "Array"
         return array_compare(source, target, current_path)
       else
         # A scaler value
@@ -39,7 +39,7 @@ module ObjectPatch
       # Keys to remove
       (src_hash.keys - tgt_hash.keys).each do |k|
         operations.push(
-          Operations::Test.new("path" => Pointer.encode(current_path + Array(k)), "value" => tgt_hash[k]),
+          Operations::Test.new("path" => Pointer.encode(current_path + Array(k)), "value" => src_hash[k]),
           Operations::Remove.new("path" => Pointer.encode(current_path + Array(k)))
         )
       end
@@ -47,7 +47,7 @@ module ObjectPatch
       # Missing keys to add
       (tgt_hash.keys - src_hash.keys).each do |k|
         operations.push(
-          Operations::Add.new("path" => Pointer.encode(current_path + Array(k)))
+          Operations::Add.new("path" => Pointer.encode(current_path + Array(k)), "value" => tgt_hash[k])
         )
       end
 
