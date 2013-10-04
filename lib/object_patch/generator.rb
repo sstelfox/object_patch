@@ -12,13 +12,13 @@ module ObjectPatch
     # @param [Object] target The target document we'll generate the
     #   differences for.
     # @return [Array<Hash>]
-    def generate(source, target, current_path = ["/"])
+    def generate(source, target, current_path = [])
       if source.class != target.class
         # The simplest of cases is that we have incompatible types, in which
         # case we'll full replace the root. This of course could be optimized
         # for situations where the root as moved to a child element but that is
         # harder to detect...
-        return [Operations::Replace.new("path": Pointer.encode(current_path), "value": target)]
+        return [Operations::Replace.new("path" => Pointer.encode(current_path), "value" => target)]
       end
 
       case source.class
@@ -29,7 +29,7 @@ module ObjectPatch
       else
         # A scaler value
         return [] if source == target
-        return [Operations::Replace.new("path": Pointer.encode(current_path), "value": target)]
+        return [Operations::Replace.new("path" => Pointer.encode(current_path), "value" => target)]
       end
     end
 
@@ -39,15 +39,15 @@ module ObjectPatch
       # Keys to remove
       (src_hash.keys - tgt_hash.keys).each do |k|
         operations.push(
-          Operations::Test.new("path": Pointer.encode(current_path + Array(k)), "value": tgt_hash[k]),
-          Operations::Remove.new("path": Pointer.encode(current_path + Array(k)))
+          Operations::Test.new("path" => Pointer.encode(current_path + Array(k)), "value" => tgt_hash[k]),
+          Operations::Remove.new("path" => Pointer.encode(current_path + Array(k)))
         )
       end
 
       # Missing keys to add
       (tgt_hash.keys - src_hash.keys).each do |k|
         operations.push(
-          Operations::Add.new("path": Pointer.encode(current_path + Array(k))
+          Operations::Add.new("path" => Pointer.encode(current_path + Array(k)))
         )
       end
 
@@ -63,6 +63,6 @@ module ObjectPatch
       operations = []
     end
 
-    module_function :generate
+    module_function :array_compare, :generate, :hash_compare
   end
 end

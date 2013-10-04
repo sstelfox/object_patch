@@ -39,6 +39,7 @@ module ObjectPatch # :nodoc:
   #   differences for.
   # @return [Array<Hash>]
   def generate(source, target)
+    Generator.generate(source, target)
   end
 
   module_function :apply, :generate
