@@ -38,16 +38,18 @@ module ObjectPatch
 
       # Keys to remove
       (src_hash.keys - tgt_hash.keys).each do |k|
+        path = Pointer.encode(current_path + Array(k))
         operations.push(
-          Operations::Test.new("path" => Pointer.encode(current_path + Array(k)), "value" => src_hash[k]),
-          Operations::Remove.new("path" => Pointer.encode(current_path + Array(k)))
+          Operations::Test.new("path" => path, "value" => src_hash[k]),
+          Operations::Remove.new("path" => path)
         )
       end
 
       # Missing keys to add
       (tgt_hash.keys - src_hash.keys).each do |k|
+        path = Pointer.encode(current_path + Array(k))
         operations.push(
-          Operations::Add.new("path" => Pointer.encode(current_path + Array(k)), "value" => tgt_hash[k])
+          Operations::Add.new("path" => path, "value" => tgt_hash[k])
         )
       end
 
@@ -59,8 +61,48 @@ module ObjectPatch
       operations
     end
 
-    def array_compare(src_hash, tgt_hash, current_path)
+    def array_compare(src_ary, tgt_ary, current_path)
       operations = []
+
+      if src_ary.size > tgt_ary.size
+        # We'll need to remove some elements
+        base_size = tgt_ary.size
+        src_ary[base_size..-1].each_with_index do |itm, idx|
+          path = Pointer.encode(current_path + Array(base_size + idx))
+          operations.push(
+            Operations::Test.new("path" => path, "value" => src_ary[base_size + idx]),
+            Operations::Remove.new("path" => path)
+          )
+        end
+      elsif src_ary.size < tgt_ary.size
+        # We'll need to add some elements
+        base_size = tgt_ary.size
+        src_ary[base_size..-1].each_with_index do |itm, idx|
+          path = Pointer.encode(current_path + Array(base_size + idx))
+          operations.push(
+            Operations::Add.new("path" => path, "value" => tgt_ary[base_size + idx]),
+          )
+        end
+      end
+
+      # Compare the existing values in the array
+      smallest_length = (src_ary.size > tgt_ary.size) ? tgt_ary.size : src_ary.size
+      smallest_length.times do |n|
+        if src_ary[n].is_a?(Array) || src_ary[n].is_a?(Hash) || tgt_ary[n].is_a?(Array) || tgt_ary[n].is_a?(Hash)
+          operations.push(*generate(src_ary[n], tgt_ary[n], current_path + Array(n)))
+          next
+        end
+
+        unless src_ary[n] == tgt_ary[n]
+          path = Pointer.encode(current_path + Array(n))
+          operations.push(
+            Operations::Test.new("path" => path, "value" => src_ary[n]),
+            Operations::Replace.new("path" => path, "value" => tgt_ary[n]),
+          )
+        end
+      end
+
+      operations
     end
 
     module_function :array_compare, :generate, :hash_compare
