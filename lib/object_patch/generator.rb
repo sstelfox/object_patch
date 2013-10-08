@@ -88,11 +88,15 @@ module ObjectPatch
       # Compare the existing values in the array
       smallest_length = (src_ary.size > tgt_ary.size) ? tgt_ary.size : src_ary.size
       smallest_length.times do |n|
+        # Handle arrays and hashes in a special way as their values are
+        # potentially not going to be able to hold up to a comparison.
         if src_ary[n].is_a?(Array) || src_ary[n].is_a?(Hash) || tgt_ary[n].is_a?(Array) || tgt_ary[n].is_a?(Hash)
           operations.push(*generate(src_ary[n], tgt_ary[n], current_path + Array(n)))
           next
         end
 
+        # We've gotten the complicated cases out, this is a simple test and
+        # replace.
         unless src_ary[n] == tgt_ary[n]
           path = Pointer.encode(current_path + Array(n))
           operations.push(
