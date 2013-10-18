@@ -1,5 +1,7 @@
 # ObjectPatch
 
+[![Gem Version](https://badge.fury.io/rb/object_patch.png)](http://badge.fury.io/rb/object_patch)
+
 Please note this project isn't complete in either the generation or application
 of patches.
 
