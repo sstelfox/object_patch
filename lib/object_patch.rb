@@ -10,16 +10,19 @@ require "object_patch/version"
 module ObjectPatch # :nodoc:
 
   # Applies a series of patches to a source document. It is important to note
-  # that this will return the changed document but will also modify the original
-  # document that got passed in, using dup also isn't enough to prevent this
-  # modification as any subvalues within a hash or an array will not by
-  # duplicated. A deep duplication by marshalling the object, encoding and
-  # decoding as JSON, or using a recursive function to duplicate all of an
+  # that this will return the changed document but will also modify the
+  # original document that got passed in, using dup also isn't enough to
+  # prevent this modification as any subvalues within a hash or an array will
+  # not by duplicated. A deep duplication by marshalling the object, encoding
+  # and decoding as JSON, or using a recursive function to duplicate all of an
   # object's contents would prevent your source from being modified.
   #
   # The JSON Patch RFC specifies that the original document shouldn't be
   # modified unless the whole series of patches is able to be applied
-  # successfully.
+  # successfully, which this violates.
+  #
+  # It is important to note that because of how this method works, it expects
+  # any hash keys coming in on the source document to be strings.
   #
   # @param [Object] source The source document that will be modified.
   # @param [Array<Hash<String => String>>] patches An array of JSON patch
