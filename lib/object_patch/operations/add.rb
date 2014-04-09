@@ -14,7 +14,7 @@ module ObjectPatch::Operations
     def apply(target_doc)
       key = processed_path.last
       inner_obj = ObjectPatch::Pointer.eval(processed_path[0...-1], target_doc)
-      
+
       raise MissingTargetException, @path unless inner_obj
 
       if key

@@ -27,7 +27,8 @@ module ObjectPatch # :nodoc:
   # @return [Object] The modified source document.
   def apply(source, patches)
     patches.inject(source) do |src, patch|
-      OperationFactory.build(patch).apply(src)
+      patch = patch.is_a?(Hash) ? OperationFactory.build(patch) : patch
+      patch.apply(src)
     end
   end
 
