@@ -76,8 +76,8 @@ module ObjectPatch
         end
       elsif src_ary.size < tgt_ary.size
         # We'll need to add some elements
-        base_size = tgt_ary.size
-        src_ary[base_size..-1].each_with_index do |itm, idx|
+        base_size = src_ary.size
+        tgt_ary[base_size..-1].each_with_index do |itm, idx|
           path = Pointer.encode(current_path + Array(base_size + idx))
           operations.push(
             Operations::Add.new("path" => path, "value" => tgt_ary[base_size + idx]),
